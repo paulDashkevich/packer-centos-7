@@ -1,0 +1,69 @@
+{
+    "variables": {
+        "iso_url": "http://mirror.globo.com/centos/7/isos/x86_64",
+        "vm_basename": "centos-7.3_x64",
+        "iso_file": "CentOS-7-x86_64-Minimal-1611.iso",
+        "iso_sha256": "27bd866242ee058b7a5754e83d8ee8403e216b93d130d800852a96f41c34d86a",
+        "ssh_username": "vagrant",
+        "ssh_password": "vagrant"
+    },
+    
+    "builders": [{
+        "type": "virtualbox-iso",
+        "vm_name": "{{user `vm_basename`}}",
+        "disk_size": 81920,
+        "guest_os_type": "RedHat_64",
+        "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+        "virtualbox_version_file": ".vbox_version",
+        "iso_urls": "{{user `iso_url`}}/{{user `iso_file`}}",
+        "iso_checksum_type": "sha256",
+        "vboxmanage": [
+			["modifyvm", "{{.Name}}", "--memory", "1024"],
+			["modifyvm", "{{.Name}}", "--cpus", "2"],
+			["modifyvm", "{{.Name}}", "--ioapic", "on"],
+			["modifyvm", "{{.Name}}", "--pae", "on"],
+			["modifyvm", "{{.Name}}", "--rtcuseutc", "on"],
+            ["modifyvm", "{{.Name}}", "--bioslogodisplaytime", "1"]
+        ],
+        
+        "http_directory": "http",
+        "boot_wait": "5s",
+        "boot_command": [
+            "<esc><wait>",
+            "vmlinuz initrd=initrd.img inst.geoloc=0 rd.driver.blacklist=dm-multipath ",
+            "inst.text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/vbox-ks.cfg ",
+            "<enter><wait>"
+        ],
+        "shutdown_command": "echo {{user `ssh_username`}} |sudo -S /sbin/halt -h -p",
+
+        "iso_checksum": "{{user `iso_sha256`}}",
+        "ssh_username": "{{user `ssh_username`}}",
+        "ssh_password": "{{user `ssh_password`}}",
+        "ssh_wait_timeout": "20m"
+    }],
+
+    "provisioners": [
+    {
+      "type": "shell",
+      "script": "scripts/virtualbox.sh"
+    },
+    {
+      "type": "ansible",
+      "playbook_file": "ansible/main.yml",
+      "sftp_command": "/usr/libexec/openssh/sftp-server -e",
+      "user": "{{user `ssh_name`}}",
+      "ansible_env_vars": [
+        "ANSIBLE_HOST_KEY_CHECKING=False", 
+        "ANSIBLE_SSH_ARGS='-o ForwardAgent=yes -o ControlMaster=auto -o ControlPersist=60s'",
+        "ANSIBLE_FORCE_COLOR=1"
+      ]
+    }
+  ],
+
+  "post-processors": [{
+    "type": "vagrant",
+    "compression_level": 9,
+    "output": "packer-centos-7-x86_64.box",
+    "keep_input_artifact": false
+  }]
+}
