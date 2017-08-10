@@ -6,10 +6,10 @@ VBOX_ISO=/tmp/VBoxGuestAdditions_$VBOX_VERSION.iso
 VBOX_MNTDIR=$(mktemp --tmpdir=/tmp -q -d -t vbox_mnt_XXXXXX)
 
 # Install Vbox Guest Additions
-mount -o loop $VBOX_ISO $VBOX_MNTDIR
-yes|sh $VBOX_MNTDIR/VBoxLinuxAdditions.run
+sudo mount -o loop $VBOX_ISO $VBOX_MNTDIR
+yes|sudo sh $VBOX_MNTDIR/VBoxLinuxAdditions.run
 
 # Clean up
-umount $VBOX_MNTDIR
-rm -rf $VBOX_MNTDIR
-rm -f $VBOX_ISO
+sudo umount $VBOX_MNTDIR
+sudo rm -rf $VBOX_MNTDIR
+sudo rm -f $VBOX_ISO
