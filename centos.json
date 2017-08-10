@@ -2,8 +2,8 @@
     "variables": {
         "iso_url": "http://mirror.globo.com/centos/7/isos/x86_64",
         "vm_basename": "centos-7.3_x64",
-        "iso_file": "CentOS-7-x86_64-Minimal-1611.iso",
-        "iso_sha256": "27bd866242ee058b7a5754e83d8ee8403e216b93d130d800852a96f41c34d86a",
+        "iso_file": "CentOS-7-x86_64-DVD-1611.iso",
+        "iso_sha256": "c455ee948e872ad2194bdddd39045b83634e8613249182b88f549bb2319d97eb",
         "ssh_username": "vagrant",
         "ssh_password": "vagrant"
     },
@@ -13,16 +13,16 @@
         "vm_name": "{{user `vm_basename`}}",
         "disk_size": 81920,
         "guest_os_type": "RedHat_64",
-        "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+        "guest_additions_path": "/tmp/VBoxGuestAdditions_{{.Version}}.iso",
         "virtualbox_version_file": ".vbox_version",
         "iso_urls": "{{user `iso_url`}}/{{user `iso_file`}}",
         "iso_checksum_type": "sha256",
         "vboxmanage": [
-			["modifyvm", "{{.Name}}", "--memory", "1024"],
-			["modifyvm", "{{.Name}}", "--cpus", "2"],
-			["modifyvm", "{{.Name}}", "--ioapic", "on"],
-			["modifyvm", "{{.Name}}", "--pae", "on"],
-			["modifyvm", "{{.Name}}", "--rtcuseutc", "on"],
+			      ["modifyvm", "{{.Name}}", "--memory", "1024"],
+			      ["modifyvm", "{{.Name}}", "--cpus", "2"],
+			      ["modifyvm", "{{.Name}}", "--ioapic", "on"],
+			      ["modifyvm", "{{.Name}}", "--pae", "on"],
+			      ["modifyvm", "{{.Name}}", "--rtcuseutc", "on"],
             ["modifyvm", "{{.Name}}", "--bioslogodisplaytime", "1"]
         ],
         
@@ -63,7 +63,7 @@
   "post-processors": [{
     "type": "vagrant",
     "compression_level": 9,
-    "output": "packer-centos-7-x86_64.box",
+    "output": "{{user `vm_basename`}}.box",
     "keep_input_artifact": false
   }]
 }
