@@ -1,9 +1,9 @@
 {
     "variables": {
         "iso_url": "http://mirror.globo.com/centos/7/isos/x86_64",
-        "vm_basename": "centos-7.3_x64",
-        "iso_file": "CentOS-7-x86_64-DVD-1611.iso",
-        "iso_sha256": "c455ee948e872ad2194bdddd39045b83634e8613249182b88f549bb2319d97eb",
+        "vm_basename": "centos-7.4_x64",
+        "iso_file": "CentOS-7-x86_64-DVD-1708.iso",
+        "iso_sha256": "ec7500d4b006702af6af023b1f8f1b890b6c7ee54400bb98cef968b883cd6546",
         "ssh_username": "vagrant",
         "ssh_password": "vagrant"
     },
@@ -15,8 +15,11 @@
         "guest_os_type": "RedHat_64",
         "guest_additions_path": "/tmp/VBoxGuestAdditions_{{.Version}}.iso",
         "virtualbox_version_file": ".vbox_version",
+
         "iso_urls": "{{user `iso_url`}}/{{user `iso_file`}}",
         "iso_checksum_type": "sha256",
+        "iso_checksum": "{{user `iso_sha256`}}",
+
         "vboxmanage": [
 			      ["modifyvm", "{{.Name}}", "--memory", "1024"],
 			      ["modifyvm", "{{.Name}}", "--cpus", "2"],
@@ -34,9 +37,9 @@
             "inst.text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/vbox-ks.cfg ",
             "<enter><wait>"
         ],
+
         "shutdown_command": "echo {{user `ssh_username`}} |sudo -S /sbin/halt -h -p",
 
-        "iso_checksum": "{{user `iso_sha256`}}",
         "ssh_username": "{{user `ssh_username`}}",
         "ssh_password": "{{user `ssh_password`}}",
         "ssh_wait_timeout": "20m"
@@ -53,8 +56,6 @@
       "sftp_command": "/usr/libexec/openssh/sftp-server -e",
       "user": "{{user `ssh_name`}}",
       "ansible_env_vars": [
-        "ANSIBLE_HOST_KEY_CHECKING=False", 
-        "ANSIBLE_SSH_ARGS='-o ForwardAgent=yes -o ControlMaster=auto -o ControlPersist=60s'",
         "ANSIBLE_FORCE_COLOR=1"
       ]
     }
