@@ -4,7 +4,6 @@
 *.swp
 vaultpass
 roles/
-.vscode/
 output-virtualbox-iso/
 packer_cache/
 *.box
