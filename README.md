@@ -1,7 +1,7 @@
-# Packer Example - CentOS 7 mininal using ansible
+# Packer Example - CentOS 7 using ansible
 This repository contains an example of creating a template using Packer and VirtualBox using ansible
 
-**Current CentOS Version Used: 7.3 (1611)**
+**Current CentOS Version Used: 7.4 (1708)**
 
 This example build configuration installs and configures CentOS 7 x86_64, and then generates a Vagrant box files, for:
 - VirtualBox
