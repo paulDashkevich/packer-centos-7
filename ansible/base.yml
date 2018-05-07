@@ -4,6 +4,12 @@
     name: '*'
     state: latest
 
+- name: set vagrant insecure authorized keys
+  authorized_key:
+    user: vagrant
+    key: "{{ lookup('file', 'files/vagrant.pub') }}"
+    state: present
+
 - name: install packages
   yum:
     name: "{{ item }}"
